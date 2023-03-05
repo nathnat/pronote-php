@@ -3,6 +3,7 @@
     "type": "library",
     "description": "A PHP API wrapper for the PRONOTE student administration service. ",
     "homepage": "https://github.com/nathnat/pronote-php",
+    "version": "0.0.1",
     "keywords": [
         "pronote",
         "api",
