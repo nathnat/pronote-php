@@ -1,0 +1,26 @@
+{
+    "name": "nathnat/pronote-php",
+    "type": "library",
+    "description": "A PHP API wrapper for the PRONOTE student administration service. ",
+    "homepage": "https://github.com/nathnat/pronote-php",
+    "keywords": [
+        "pronote",
+        "api",
+        "scraper"
+    ],
+    "authors": [
+        {
+            "name": "Nathaniel Eskenazi",
+            "email": "natha.esken@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Pronote\\": "src/"
+        }
+    },
+    "require": {
+        "phpseclib/phpseclib": "~3.0"
+    }
+}
