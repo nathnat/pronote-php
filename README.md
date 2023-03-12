@@ -4,11 +4,11 @@
 
 Une librairie PHP pour accéder aux données de PRONOTE depuis un compte élève.
 
-### 🚧 ATTENTION : cette librairie en est en plein développement 🚧
+### 🚧 ATTENTION : cette librairie est en plein développement 🚧
 En effet pleins de fonctionnalités sont manquantes et la librairie est sûrement bourrée de bug.
 
-C'est la toute première version ne l'utilisez surtout pas en prod pour l'instant.
-Je la sort comme une démo pour que vous puissiez jouer avec. De nombreuses mises à jour sortiront prochainement.
+C'est la toute première version ne l'utilisez surtout pas en production pour l'instant.
+Je la sors comme une démo pour que vous puissiez jouer avec. De nombreuses mises à jour sortiront prochainement.
 
 ## Données récupérables
 
