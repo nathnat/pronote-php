@@ -4,11 +4,10 @@
 
 Une librairie PHP pour accéder aux données de PRONOTE depuis un compte élève.
 
-### 🚧 ATTENTION : cette librairie en est en plein développement 🚧
+### 🚧 ATTENTION : cette librairie est en plein développement 🚧
 En effet pleins de fonctionnalités sont manquantes et la librairie est sûrement bourrée de bug.
 
-C'est la toute première version ne l'utilisez surtout pas en prod pour l'instant.
-Je la sort comme une démo pour que vous puissiez jouer avec. De nombreuses mises à jour sortiront prochainement.
+Je la sors comme une démo pour que vous puissiez jouer avec. De nombreuses mises à jour sortent réguliérement.
 
 ## Données récupérables
 
@@ -79,7 +78,7 @@ Le client correspond à une instance de la classe Pronote. Un client ne peut se 
 
 ```php
 // Initialise le client
-$client = new Pronote('https://demo.index-education.net/pronote/eleve.html', 'demonstration', 'pronotevs', /*, cas*/);
+$client = new Pronote('https://demo.index-education.net/pronote/eleve.html', 'demonstration', 'pronotevs' /*, cas*/);
 
 // Connecte le client à Pronote
 $client->login();
@@ -87,9 +86,38 @@ $client->login();
 
 ## Comptes région supportés
 
-Pour l'instant aucun compte région n'est supporté, l'API n'est utilisable que si vous pouvez vous connecter directement sur l'interface de Pronote.
+**Uniquement dans le cas où vous ne pouvez PAS vous connecter directement par Pronote, mais devez passer par une interface régionale spéciale.**
 
-Je suis en plein développement afin de supporter ces cas.
+**Si vous pouvez vous connecter directement sur l'interface de Pronote, l'API devrait fonctionner PEU IMPORTE VOTRE ACADÉMIE.**
+
+Pour l'instant peu de comptes régions sont supportés.
+
+Voici la listes des académies supportées pour l'instant :
+
+<details>
+  <summary>Cas liste</summary>
+    - Essone (PronoteCas::ESSONNE)
+    - Mayotte (PronoteCas::MAYOTTE) 
+    - Guadeloupe (PronoteCas::NEOCONNECT_GUADELOUPE)
+    - Lycée Connecte Nouvelle-Aquitaine (PronoteCas::LYCEECONNECTE_AQUITAINE)
+    - Seine-et-Marne (PronoteCas::SEINE_ET_MARNE)
+    - Île de France (PronoteCas::ILE_DE_FRANCE)
+    - Paris Classe Numérique (PronoteCas::PARIS_CLASSE_NUMERIQUE)
+</details>
+
+Le cas doit être donné à lors de l'initialisation du client. Tous les cas sont accessibles depuis la classe `PronoteCas` :
+```php
+// On inclut la classe
+use Pronote\PronoteCas;
+
+// Initialise le client avec ici l'interface de l'Ile de France
+$client = new Pronote(
+    'https://demo.index-education.net/pronote/eleve.html',
+    'demonstration',
+    'pronotevs',
+    PronoteCas::ILE_DE_FRANCE
+);
+```
 
 ## Récupèrer l'emploi du temps
 

@@ -30,9 +30,6 @@ class Pronote
     private $requestCount = 1;
     private $espace = 3;
 
-    // On donne un User-Agent connu et à jour afin de ne pas se prendre la page signalant que le navigateur n'est pas compatible
-    private $userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36';
-
     // Infos fournit par l'utilisateur au début de la session
     public $username;
     public $password;
@@ -49,8 +46,6 @@ class Pronote
     public $user;
 
     public $periods = [];
-
-    public const CAS_ILEDEFRANCE = 'https://ent.iledefrance.fr/auth/login';
 
     public function __construct(string $url, string $username, string $password, string $cas = null)
     {
@@ -73,46 +68,15 @@ class Pronote
         }
 
         $start = [];
-        $cookies = null;
-        if ($this->cas == self::CAS_ILEDEFRANCE) {
+        // Pour tous les lycée ENT
+        if (in_array($this->cas, PronoteCas::ENT_INTERFACES)) {
+            $start = $this->extractStart(PronoteCas::openENT($this->server, $this->username, $this->password, $this->cas));
 
-            // On construit les valeurs du POST pour l'ENT
-            $callback = '/cas/login?service=' . $this->server;
-            $postData = "email={$this->username}&password={$this->password}&callback={$callback}";
-
-            // On récupère les cookies de la session ENT
-            $curl = curl_init();
-            curl_setopt_array($curl, [
-                CURLOPT_SSL_VERIFYPEER => false,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_USERAGENT => $this->userAgent,
-                CURLOPT_URL => $this->cas,
-                CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => $postData,
-                CURLOPT_HTTPHEADER =>  ['Content-Type: application/x-www-form-urlencoded'],
-                CURLOPT_HEADER => 1
-            ]);
-            $response = curl_exec($curl);
-            curl_close($curl);
-
-            // On les extraits du header de la réponse
-            $cookies = '';
-            preg_match_all('/^set-cookie:\s*([^;]*)/mi', $response, $matches);
-            foreach ($matches[1] as $item) {
-                $cookies .= $item . ';';
-            }
-
-            // On récupère la page Pronote en suivant les redirections
-            $result = $this->httpFollowRedirects('https://ent.iledefrance.fr' . $callback, ['Cookie: ' . $cookies]);
-
-            $start = $this->extractStart($result['html']);
-            $this->cookies = substr($result['cookies'], 0, strpos($result['cookies'], ';'));   
-
-            // Remplace le username et le password par ce donné dans par le login via l'ENT
+            // On remplace le username et le password par les données du login via l'ENT
             $this->username = $start['e'];
             $this->password = $start['f'];
-        } else {
+        }
+        else {
             // On récupère des données dans le HTML de la page de connexion
             $start = $this->getStart();
         }
@@ -539,48 +503,6 @@ class Pronote
     }
 
     /**
-     * Execute les requêtes HTTP en suivant les redirections. Nécessaire pour le login avec cas.
-     * @param string $url L'url à request
-     * @param array $httpHeader Des headers à rajouter pour la requête
-     * @return string La page finale après tous les redirects
-     */
-    private function httpFollowRedirects(string $url, array $httpHeader = [])
-    {
-        $headers = [];
-        $curl = curl_init();
-        curl_setopt_array($curl, [
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_USERAGENT => $this->userAgent,
-            CURLOPT_URL => $url,
-            CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
-            CURLOPT_HTTPHEADER =>  $httpHeader,
-            CURLOPT_HEADER => 1,
-            CURLOPT_HEADERFUNCTION => function ($curl, $header) use (&$headers) {
-                $len = strlen($header);
-                $header = explode(':', $header, 2);
-                if (count($header) < 2) // ignore invalid headers
-                    return $len;
-
-                $headers[strtolower(trim($header[0]))] = trim($header[1]);
-
-                return $len;
-            }
-        ]);
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        if (isset($headers['location'])) {
-            return $this->httpFollowRedirects($headers['location']);
-        }
-
-        return [
-            'cookies' => $headers['set-cookie'],
-            'html' => $response
-        ];
-    }
-
-    /**
      * Renvoie l'url du serveur Pronote au bon format.
      * @param string $url L'url du serveur
      * @return string L'url du serveur au bon format
@@ -609,7 +531,7 @@ class Pronote
         curl_setopt_array($curl, [
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_USERAGENT => $this->userAgent,
+            CURLOPT_USERAGENT => Utils::USER_AGENT,
             CURLOPT_URL => $this->server . 'eleve.html',
             CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4
         ]);
@@ -679,7 +601,7 @@ class Pronote
         $ch = curl_init();
         curl_setopt_array($ch, [
             CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_USERAGENT => $this->userAgent,
+            CURLOPT_USERAGENT => Utils::USER_AGENT,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
             CURLOPT_URL => $url,
