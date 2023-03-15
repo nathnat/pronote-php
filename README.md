@@ -5,13 +5,14 @@
 Une librairie PHP pour accéder aux données de PRONOTE depuis un compte élève.
 
 ### 🚧 ATTENTION : cette librairie est en plein développement 🚧
+
 En effet pleins de fonctionnalités sont manquantes et la librairie est sûrement bourrée de bug.
 
 Je la sors comme une démo pour que vous puissiez jouer avec. De nombreuses mises à jour sortent réguliérement.
 
 ## Données récupérables
 
-- [x] Infos Pronote, établissement et utilisateur
+- [X] Infos Pronote, établissement et utilisateur
 - [X] Emploi du temps
 - [X] Devoirs
 - [X] Notes
@@ -32,6 +33,7 @@ $ composer require nathnat/pronote-php
 ## Utilisation
 
 Commencez par inclure au début de votre code la librairie via Composer :
+
 ```php
 require 'vendor/autoload.php';
 
@@ -96,16 +98,21 @@ Voici la listes des académies supportées pour l'instant :
 
 <details>
   <summary>Cas liste</summary>
-    - Essone (PronoteCas::ESSONNE)
-    - Mayotte (PronoteCas::MAYOTTE) 
-    - Guadeloupe (PronoteCas::NEOCONNECT_GUADELOUPE)
-    - Lycée Connecte Nouvelle-Aquitaine (PronoteCas::LYCEECONNECTE_AQUITAINE)
-    - Seine-et-Marne (PronoteCas::SEINE_ET_MARNE)
-    - Île de France (PronoteCas::ILE_DE_FRANCE)
-    - Paris Classe Numérique (PronoteCas::PARIS_CLASSE_NUMERIQUE)
+
+| Académie                          | Syntaxe du cas dans l'API           |
+| ---------------------------------- | ----------------------------------- |
+| Mayotte                            | PronoteCas::MAYOTTE                 |
+| Guadeloupe                         | PronoteCas::NEOCONNECT_GUADELOUPE   |
+| Essone                             | PronoteCas::ESSONNE                 |
+| Lycée Connecte Nouvelle-Aquitaine | PronoteCas::LYCEECONNECTE_AQUITAINE |
+| Seine-et-Marne                     | PronoteCas::SEINE_ET_MARNE          |
+| Île de France                     | PronoteCas::ILE_DE_FRANCE           |
+| Paris Classe Numérique            | PronoteCas::PARIS_CLASSE_NUMERIQUE  |
+
 </details>
 
 Le cas doit être donné à lors de l'initialisation du client. Tous les cas sont accessibles depuis la classe `PronoteCas` :
+
 ```php
 // On inclut la classe
 use Pronote\PronoteCas;
@@ -137,6 +144,7 @@ $timetable = $client->timetable(
 ```
 
 La fonction renvoit un tableau de cette forme :
+
 ```php
 Array
 (
@@ -167,6 +175,7 @@ $timetable = $client->homework(
     DateTime::createFromFormat('d/m/Y', '5/03/2023'),
 );
 ```
+
 La fonction renvoit un tableau de cette forme :
 
 ```php
@@ -183,7 +192,6 @@ Array
     ...
 ```
 
-
 ## Les périodes
 
 Les périodes sont les périodes de l'année (Trimestre 1, Semestre 2, Brevet Blanc, etc.) fournit par l'établissement. Les périodes sont stockées dans le tableau  `$client->periods`. Chaque période permet d'accéder aux données qui lui sont rattachées comme les notes, les absences et les retards.
@@ -193,68 +201,68 @@ Les périodes sont les périodes de l'année (Trimestre 1, Semestre 2, Brevet Bl
 Les notes sont récupèrables via la période.
 
 Il existe trois fonctions :
+
 * `$period->grades()` permet de récupérer un tableau de note sous cette forme :
 
-    ```php
-    Array
-    (
-        [0] => Array
-            (
-                [title] => DS1 Civilisations     // La description de la note
-                [value] => 13                    // La note de l'élève
-                [scale] => 20                    // Le barème
-                [subject] => HISTOIRE-GEOGRAPHIE // La matière de la note
-                [average] => 11,89               // La moyenne de la classe
-                [max] => 15                      // La note la plus basse dans la classe
-                [min] => 10                      // La note la plus haute dans la classe
-                [coefficient] => 2
-                [date] => 26/09/2022             // La date de la note
-                [isBonus] => false               // Si la note est bonus : seul les points au dessus de 10 comptent
-                [isOptionnal] => false           // Si la note est optionnel : elle compte seulement si elle augmente la moyenne
-                [isScaledTo20] => false          // Si la note est ramené sur 20
-            )
-        ...
-    ```
-
+  ```php
+  Array
+  (
+      [0] => Array
+          (
+              [title] => DS1 Civilisations     // La description de la note
+              [value] => 13                    // La note de l'élève
+              [scale] => 20                    // Le barème
+              [subject] => HISTOIRE-GEOGRAPHIE // La matière de la note
+              [average] => 11,89               // La moyenne de la classe
+              [max] => 15                      // La note la plus basse dans la classe
+              [min] => 10                      // La note la plus haute dans la classe
+              [coefficient] => 2
+              [date] => 26/09/2022             // La date de la note
+              [isBonus] => false               // Si la note est bonus : seul les points au dessus de 10 comptent
+              [isOptionnal] => false           // Si la note est optionnel : elle compte seulement si elle augmente la moyenne
+              [isScaledTo20] => false          // Si la note est ramené sur 20
+          )
+      ...
+  ```
 * `$period->gradesBySubject()` permet récupèrer les notes classées par matière :
-    
-    ```php
-    Array ()
-        [0] => Array
-            (
-                [name] => ANGLAIS LV1    // Le nom de la matière
-                [average] => Array
-                    (
-                        [student] => 17  // La moyenne de l'élève dans la matière
-                        [class] => 13,79 // La moyenne de la classe dans la matière
-                        [min] => 6,5     // La plus basse moyenne de la classe
-                        [max] => 18      // La plus haute moyenne de la classe
-                        [scale] => 20    // Le barème des moyennes
-                    )
 
-                [color] => #B76AFD       // La couleur de fond de la matière dans l'emploi du temps
-                [grades] => Array ()     // Un tableau contenant toutes les notes de la matière au même format que celles renvoyées par la fonction `->grades()`
-            )
-        ...
-    ```
+  ```php
+  Array ()
+      [0] => Array
+          (
+              [name] => ANGLAIS LV1    // Le nom de la matière
+              [average] => Array
+                  (
+                      [student] => 17  // La moyenne de l'élève dans la matière
+                      [class] => 13,79 // La moyenne de la classe dans la matière
+                      [min] => 6,5     // La plus basse moyenne de la classe
+                      [max] => 18      // La plus haute moyenne de la classe
+                      [scale] => 20    // Le barème des moyennes
+                  )
 
-
+              [color] => #B76AFD       // La couleur de fond de la matière dans l'emploi du temps
+              [grades] => Array ()     // Un tableau contenant toutes les notes de la matière au même format que celles renvoyées par la fonction `->grades()`
+          )
+      ...
+  ```
 * Enfin, `$period->overallAverage()` permet de récupèrer la moyenne générale de l'élève :
-    ```php
-    $moyennes = $client->periods[1]->overallAverage();
 
-    echo 'Moyennes du ' . $client->periods[1]->name . " : \n";
-    print_r($moyennes);
-    ```
-    ```php
-    Moyennes du Trimestre 2 : 
-    Array
-    (
-        [student] => 14,33 // La moyenne de l'élève
-        [class] => 11,54   // La moyenne de la classe
-        [scale] => 20      // Le barème des moyennes
-    )
-    ```
+  ```php
+  $moyennes = $client->periods[1]->overallAverage();
+
+  echo 'Moyennes du ' . $client->periods[1]->name . " : \n";
+  print_r($moyennes);
+  ```
+
+  ```php
+  Moyennes du Trimestre 2 : 
+  Array
+  (
+      [student] => 14,33 // La moyenne de l'élève
+      [class] => 11,54   // La moyenne de la classe
+      [scale] => 20      // Le barème des moyennes
+  )
+  ```
 
 ## Récupèrer les absences/retards/punitions de l'élève
 
@@ -302,7 +310,7 @@ Array
     ...
 ```
 
-*  Les punitions sont récupèrables via la période :
+* Les punitions sont récupèrables via la période :
 
 ```php
 $punitions = $client->periods[1]->punishments(); // Fonction pour récupérer les punitions renvoit :
