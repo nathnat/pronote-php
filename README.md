@@ -2,24 +2,15 @@
 
 ## Introduction
 
-Une librairie PHP pour accéder aux données de PRONOTE depuis un compte élève.
-
-### 🚧 ATTENTION : cette librairie est en plein développement 🚧
-
-En effet pleins de fonctionnalités sont manquantes et la librairie est sûrement bourrée de bug.
-
-Je la sors comme une démo pour que vous puissiez jouer avec. De nombreuses mises à jour sortent réguliérement.
+Une librairie PHP pour accéder aux données de PRONOTE depuis un compte élève. La librairie exploite l'API interne de Pronote avec PHP.
 
 ## Données récupérables
 
-- [X] Infos Pronote, établissement et utilisateur
-- [X] Emploi du temps
-- [X] Devoirs
-- [X] Notes
-- [X] Absences/punitions/retards
-- [ ] Compétences/évaluations
-- [ ] Menu de la cantine
-- [ ] Fichiers
+* Infos Pronote, établissement et utilisateur
+* Emploi du temps
+* Devoirs
+* Notes
+* Absences/punitions/retards
 
 ## Installation
 
